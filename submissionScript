@@ -3,6 +3,7 @@
 
 # Author: Evan Manuella
 
+
 : <<'ExplainForLoop'
 
 Every iteration, var is going to be a new element of the command line arguments
@@ -51,11 +52,12 @@ do
         
     elif [[ "${file_name%]}" != "$file_name" ]] && [[  "${file_name%.c]}" != "$file_name" ]]
     then 
-        touch ${driver}.txt #Storing the transcript here
-        gcc -o ./MmMmMnNnN ./${driver}
-        ./MmMmMnNnN > ${driver}.txt
-        rm ./MmMmMnNnN #weird name to make sure I don't overwrite anything    
-        enscript -p - -2 -r  ./${driver}.txt  |  ps2pdf - ${driver}output.pdf
+        echo ${file_name%.c]}
+        touch ${file_name%.c]} #Storing the transcript here
+        gcc -o "output_${file_name%.c]}" ./${file_name%]}
+        touch ${file_name%.c]}output
+        ${file_name%.c]} > "${file_name%.c]}output"
+        enscript -p - -2 -r "${file_name%.c]}output" |  ps2pdf - ${file_name%.c]}output.pdf
             
     
         pdf_files[counter_pdf]=${driver}.pdf
@@ -73,15 +75,13 @@ do
         
         #This should be able to handle make as well
         
-      
-        
         pdf_files[counter_pdf]="${driver}.pdf"
         source_files[counter_source]="${driver}.scm"
         
         ((counter_pdf++))
         ((counter_files++))
         
-    #if a scheme file
+        #if a scheme file
         elif  [ "${file_name%.scm}" != "$file_name" ]; #Convert .scm file into .pdf and make sure it is not a driver
         then
         file_name_loc=${file_name:1} #remove the "["
@@ -97,8 +97,8 @@ do
         ((count_pdf++))
         
     #if a c file
-        elif [ "${file_name%.c}" != "$file_name" ]  #if a c file
-        then
+    elif [ "${file_name%.c}" != "$file_name" ]  #if a c file
+    then
         
         file_name_loc=${file_name:1} #remove the "["
         enscript -p - -Ec -2 -r --color  ${file_name}  |  ps2pdf - ${file_name%.c}.pdf
@@ -108,13 +108,13 @@ do
         
         ((counter_pdf++))
         ((counter_files++))
-        fi
+    fi
         #else
         #echo "File" var "does not meet preconditions"
         #fi
-        done
-        
+done
+
 #Any formatting issues reported via $status
-        exit $status
+exit $status
         
         
