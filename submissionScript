@@ -36,10 +36,6 @@ do
     
     file_name=$var
     first_char=${file_name:0:1}
-    
-
-    if [  ${file_name%".scm"}] != $file_name ] #if there is a "]" at the end (Driver)
-
 
 
     #if a scheme driver
