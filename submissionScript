@@ -19,17 +19,22 @@ Elif, we create change them to .pdfs
 ExplainForLoop
 
 
+: <<'ShortTermBugs'
+
+
+
+Remove the file type for c before adding ".pdf"
+*TOBEDELETED are not deleted
+
+
+
+ShortTermBugs
+
 #first argument (including [)
 
 
 counter_pdf=0
 counter_source=0
-
-
-car=VARY
-bas=RY
-
-
 
 for var in "$@"
 do
@@ -39,7 +44,7 @@ do
 
 
     #if a scheme driver
-    if [  ${file_name%".scm"}] != $file_name ] #if there is a "]" at the end (Driver)
+    if [  ${file_name%".scm]"} != $file_name ] #if there is a "]" at the end (Driver)
     then
 
         driver_with_type=${file_name%]}
@@ -60,14 +65,14 @@ do
         pdf_files[counter_pdf]="${driver}.pdf"
         source_files[counter_source]="${driver}.scm"
         
-    elif [[ "${file_name%]}" != "$file_name" ]] && [[  "${file_name%.c]}" != "$file_name" ]]
+    elif [ ${file_name%.c]} != "$file_name" ]
     then 
-        echo ${file_name%.c]}
-        touch ${file_name%.c]} #Storing the transcript here
-        gcc -o "output_${file_name%.c]}" ./${file_name%]}
-        touch ${file_name%.c]}output
-        ${file_name%.c]} > "${file_name%.c]}output"
-        enscript -p - -2 -r "${file_name%.c]}output" |  ps2pdf - ${file_name%.c]}output.pdf
+        
+        gcc -o "compiled_${file_name%.c]}" ./${file_name%]}
+
+	touch ""
+
+        enscript -p - -2 -r "${file_name}" |  ps2pdf - "${file_name%.c]}output.pdf"
             
     
         pdf_files[counter_pdf]=${driver}.pdf
@@ -98,7 +103,6 @@ do
         file_name_loc=${file_name%]} #remove possible "]"
         
         enscript -p - -Escheme -2 -r --color  ${file_name_loc} | ps2pdf - "${file_name_loc%.scm}.pdf"
-        
         
         pdf_files[counter_pdf]="${file_name_loc::4}.pdf"
         source_files[counter_source]=${file_name_loc}
