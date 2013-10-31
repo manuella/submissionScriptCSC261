@@ -22,6 +22,9 @@ ExplainForLoop
 : <<'ShortTermBugs'
 
 
+Advice from adam: 
+	run output | a2ps | pdf
+
 
 Remove the file type for c before adding ".pdf"
 *TOBEDELETED are not deleted
