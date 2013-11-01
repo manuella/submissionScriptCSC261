@@ -156,7 +156,8 @@ do
         ((counter_files++))
   
     else #file is not of recognized format
-     echo  "File ${file_name} does not match recognized formats, Ignored\n"
+     echo  "File ${file_name} does not match recognized formats, Ignored"
+     status=1
     fi
 
 done
