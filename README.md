@@ -31,10 +31,3 @@ v
 testfile.scm == testfile.c
 You will get one output testfile.pdf
 Depending on which came last, one will overwrite the other
- 
-
-Need to remember to delete the temporary .txt file used for driver output
-Need to remember to remove compiled temp (for .c files)
-Need to make sure that once a driver goes through the driver if, it should
-not go through the standard .scm file
-Need to remember to report issues via $status
