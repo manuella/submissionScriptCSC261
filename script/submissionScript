@@ -45,9 +45,8 @@ for var in "$@"
 do
     
     file_name=$var
-    first_char=${file_name:0:1}
 
-
+    
     #if a scheme driver
     if [  ${file_name%".scm]"} != $file_name ] #if there is a "]" at the end (Driver)
     then
@@ -59,7 +58,7 @@ do
 
         enscript -p - -Escheme -2 -r --color $driver_with_type | ps2pdf - ${driver}.pdf
         
-        touch "${driver}TOBEDELETED" #Storing the transcript here
+        touch "${driver}DELETEME" #Storing the transcript here
 
         mzscheme -l lang/plt-pretty-big-text.ss -f "./${driver_with_type}" > "${driver}TOBEDELETED" > "${driver}TOBEDELETED"
 
@@ -67,55 +66,82 @@ do
         
 	#rm ${driver}TOBEDELETED.txt
 
-        pdf_files[counter_pdf]="${driver}.pdf"
+
+        pdf_files[counter_pdf]="Scheme${driver}.pdf"
+        ((counter_pdf++))
+
         source_files[counter_source]="${driver}.scm"
-        
-    elif [ ${file_name%.c]} != "$file_name" ]
+        ((counter_source++)) 
+
+
+
+
+
+    #if a c driver
+    elif [ ${file_name%.c]} != "$file_name" ] 
     then 
 
         driver_with_type=${file_name%]}
         driver=${driver_with_type%.c}
-        
-        gcc -o "compiled_${driver}" ./${driver_with_type}
 
-        # So how do we change run the compiled output and convert it to pdf?
+        touch "${driver}DELETEME" #output of .c file goes here
+
+        gcc -o "compiled_${driver}" ./${driver_with_type} > "${driver}DELETEME"
+
+        a2ps "${driver}DELETEME" -o TempTOBEDELETED
+        ps2pdf TempTOBEDELETED "${driver}Output.pdf"
+
+        rm TempTOBEDELETED
+        rm "compiled_${driver}"
 
         enscript -p - -2 -r "${driver_with_type}" |  ps2pdf - "${driver}.pdf"
-        pdf_files[counter_pdf]=${driver}.pdf
-        ((counter_pdf++))
-        pdffiles[counter_pdf]=${driver}output.pdf
-        source_files[counter_source]=${driver}.c
-        
-        ((counter_pdf++))
-        ((counter_files++))
 
-        elif [ "${file_name%.c}" != "$file_name" ] #then *.c
-        then
+        rm "${driver}DELETEME" #remove pesky temp file
+
+        pdf_files[counter_pdf]="C${driver}.pdf"
+        ((counter_pdf++))
+
+        pdf_files[counter_pdf]="C${driver}Output.pdf"
+        ((counter_pdf++))
+
+        source_files[counter_source]="${driver}.c"
+        ((counter_source++))
+
+
+        
+        
+    elif [ "${file_name%.c}" != "$file_name" ] #then *.c
+    then
         
         enscript -p - -Escheme -2 -r --color  $file_name  |  ps2pdf - "${file_name%.c}.pdf"
-        
         #This should be able to handle make as well
         
         pdf_files[counter_pdf]="${driver}.pdf"
-        source_files[counter_source]="${driver}.scm"
-        
         ((counter_pdf++))
-        ((counter_files++))
+        
+        source_files[counter_source]="${driver}.scm"
+        ((counter_source++))
+        
+        
+        
         
         #if a scheme file
-        elif  [ "${file_name%.scm}" != "$file_name" ]; #Convert .scm file into .pdf and make sure it is not a driver
-        then
-
+    elif  [ "${file_name%.scm}" != "$file_name" ]; #Convert .scm file into .pdf and make sure it is not a driver
+    then
+        
         file_name_loc=${file_name%]} #remove possible "]"
         
         enscript -p - -Escheme -2 -r --color  ${file_name_loc} | ps2pdf - "${file_name_loc%.scm}.pdf"
         
         pdf_files[counter_pdf]="${file_name_loc::4}.pdf"
-        source_files[counter_source]=${file_name_loc}
-        
-        ((counter_source++))
         ((count_pdf++))
         
+        source_files[counter_source]=${file_name_loc}
+        ((counter_source++))
+        
+        
+        
+
     #if a c file
     elif [ "${file_name%.c}" != "$file_name" ]  #if a c file
     then
@@ -128,11 +154,17 @@ do
         
         ((counter_pdf++))
         ((counter_files++))
+  
+    else #file is not of recognized format
+     echo  "File ${file_name} does not match recognized formats, Ignored\n"
     fi
-        #else
-        #echo "File" var "does not meet preconditions"
-        #fi
+
 done
+
+
+echo ${pdf_files[@]}
+echo ${source_files[@]}
+
 
 #Any formatting issues reported via $status
 exit $status
