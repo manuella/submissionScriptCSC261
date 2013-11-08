@@ -14,20 +14,15 @@ http://www.cs.grinnell.edu/~weinman/courses/CSC261/2013F/assignments/index.html
 
 input ex:
 
-$script [doThis.scm withThis.scm] [doThis.c withThis.c]  justthis.scm
+$script source.scm driver.scm] source1.c driver1.c]  source2.scm
 
-[ and ] pair denotes a driver with its sources preceding it
-
-It is not necessary to use "[", but I include this for my own preference:
-I want to be able to visually identify what drivers go with what sources.
-
-If there is no driver for a source, it can be independent like justthis.scm
+] denotes a driver
 
 NOTES
 
-This script has not been made to recognize files with different file extension, but the same name.
+This script has not been made to recognize files with different file extensions, but the same name.
 |
 v
 testfile.scm == testfile.c
-You will get one output testfile.pdf
-Depending on which came last, one will overwrite the other
+
+Avoid this
