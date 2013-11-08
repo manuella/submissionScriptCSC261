@@ -63,7 +63,7 @@ do
 
         enscript -p - -Escheme -2 -r --color $driver_with_type | ps2pdf - ${driver}.pdf
         
-        touch "${driver}DELETEME" #Storing the transcript here
+        touch "${driver}Transcript" #Storing the transcript here
 
         mzscheme -l lang/plt-pretty-big-text.ss -f "./${driver_with_type}" > "${driver}DELETEME" > "${driver}TOBEDELETED"
 
@@ -82,23 +82,22 @@ do
         ((counter_source++)) 
 
 
-
-
-
     #if a c driver
+
+
     elif [ ${file_name%.c]} != "$file_name" ] 
-    then 
+    then  
 
         driver_with_type=${file_name%]}
-        driver=${driver_with_type%.c}
+        driver=${file_name%.c]%}
 
-        touch "${driver}DELETEME" #output of .c file goes here
+        touch "${driver}Output" #output of .c file goes here
 
         gcc -o "compiled_${driver}" ./${driver_with_type}
 
-        "compiled_${driver}" > "${driver}DELETEME"
+        "compiled_${driver}" > "${driver}Output"
 
-        a2ps "${driver}DELETEME" -o TempTOBEDELETED
+        a2ps "${driver}Output" -o TempTOBEDELETED
         ps2pdf TempTOBEDELETED "${driver}Output.pdf"
 
         rm TempTOBEDELETED
@@ -106,7 +105,7 @@ do
 
         enscript -p - -2 -r "${driver_with_type}" |  ps2pdf - "${driver}.pdf"
 
-        rm "${driver}DELETEME" #remove pesky temp file
+        rm "${driver}Output" #remove pesky temp file
 
         pdf_files[counter_pdf]="${driver}.pdf"
         ((counter_pdf++))
@@ -114,7 +113,7 @@ do
         pdf_files[counter_pdf]="${driver}Output.pdf"
         ((counter_pdf++))
 
-        source_files[counter_source]="${driver}.c"
+        source_files[counter_source]=$driver_with_type
         ((counter_source++))
 
 
