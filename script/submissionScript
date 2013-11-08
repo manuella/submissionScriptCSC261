@@ -32,6 +32,13 @@ Remove the file type for c before adding ".pdf"
 Make sure that the arrays containing the files are correct
 
 
+**Test
+
+We get 2 drivers.pdf
+
+
+**
+
 
 ShortTermBugs
 
@@ -54,20 +61,21 @@ do
         driver_with_type=${file_name%]}
         driver=${driver_with_type%.scm}
 
-	#Cannot enscript a file with no filetype
-
         enscript -p - -Escheme -2 -r --color $driver_with_type | ps2pdf - ${driver}.pdf
         
         touch "${driver}DELETEME" #Storing the transcript here
 
-        mzscheme -l lang/plt-pretty-big-text.ss -f "./${driver_with_type}" > "${driver}TOBEDELETED" > "${driver}TOBEDELETED"
+        mzscheme -l lang/plt-pretty-big-text.ss -f "./${driver_with_type}" > "${driver}DELETEME" > "${driver}TOBEDELETED"
 
-        enscript -p - -2 -r  "${driver}TOBEDELETED" |  ps2pdf - "${driver}Output.pdf"
-        
-	#rm ${driver}TOBEDELETED.txt
+        enscript -p - -2 -r  "${driver}DELETEME" |  ps2pdf - "${driver}Output.pdf"
 
+        rm "${driver}TOBEDELETED"
+	rm "${driver}DELETEME"
 
-        pdf_files[counter_pdf]="Scheme${driver}.pdf"
+        pdf_files[counter_pdf]="${driver}Output.pdf"
+        ((counter_pdf++))
+
+        pdf_files[counter_pdf]="${driver}.pdf"
         ((counter_pdf++))
 
         source_files[counter_source]="${driver}.scm"
@@ -86,7 +94,9 @@ do
 
         touch "${driver}DELETEME" #output of .c file goes here
 
-        gcc -o "compiled_${driver}" ./${driver_with_type} > "${driver}DELETEME"
+        gcc -o "compiled_${driver}" ./${driver_with_type}
+
+        "compiled_${driver}" > "${driver}DELETEME"
 
         a2ps "${driver}DELETEME" -o TempTOBEDELETED
         ps2pdf TempTOBEDELETED "${driver}Output.pdf"
@@ -98,10 +108,10 @@ do
 
         rm "${driver}DELETEME" #remove pesky temp file
 
-        pdf_files[counter_pdf]="C${driver}.pdf"
+        pdf_files[counter_pdf]="${driver}.pdf"
         ((counter_pdf++))
 
-        pdf_files[counter_pdf]="C${driver}Output.pdf"
+        pdf_files[counter_pdf]="${driver}Output.pdf"
         ((counter_pdf++))
 
         source_files[counter_source]="${driver}.c"
@@ -128,29 +138,25 @@ do
         #if a scheme file
     elif  [ "${file_name%.scm}" != "$file_name" ]; #Convert .scm file into .pdf and make sure it is not a driver
     then
-        
-        file_name_loc=${file_name%]} #remove possible "]"
-        
-        enscript -p - -Escheme -2 -r --color  ${file_name_loc} | ps2pdf - "${file_name_loc%.scm}.pdf"
-        
-        pdf_files[counter_pdf]="${file_name_loc::4}.pdf"
+
+        enscript -p - -Escheme -2 -r --color  ${file_name} | ps2pdf - ${file_name_loc%.scm}.pdf
+        #This line will cause non-termination
+
+        pdf_files[counter_pdf]="${file_name%.scm}.pdf"
         ((count_pdf++))
-        
-        source_files[counter_source]=${file_name_loc}
+       
+        source_files[counter_source]=${file_name}
         ((counter_source++))
-        
-        
         
 
     #if a c file
     elif [ "${file_name%.c}" != "$file_name" ]  #if a c file
     then
-        
-        file_name_loc=${file_name:1} #remove the "["
+
         enscript -p - -Ec -2 -r --color  ${file_name}  |  ps2pdf - ${file_name%.c}.pdf
         
-        pdf_files[counter_pdf]="${file_name_loc%.c}.pdf"
-        source_files[counter_source]=${file_name_loc}
+        pdf_files[counter_pdf]="${file_name%.c}.pdf"
+        source_files[counter_source]=${file_name}
         
         ((counter_pdf++))
         ((counter_files++))
