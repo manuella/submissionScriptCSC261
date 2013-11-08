@@ -171,6 +171,9 @@ done
 echo ${pdf_files[@]}
 echo ${source_files[@]}
 
+pdfconcat -o submission.pdf ${pdf_files[@]}
+
+tar cf submission.tar submission.pdf ${source_files[@]}
 
 #Any formatting issues reported via $status
 exit $status
