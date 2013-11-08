@@ -65,12 +65,11 @@ do
         
         touch "${driver}Transcript" #Storing the transcript here
 
-        mzscheme -l lang/plt-pretty-big-text.ss -f "./${driver_with_type}" > "${driver}DELETEME" > "${driver}TOBEDELETED"
+        mzscheme -l lang/plt-pretty-big-text.ss -f "./${driver_with_type}" > "${driver}Transcript"
 
-        enscript -p - -2 -r  "${driver}DELETEME" |  ps2pdf - "${driver}Output.pdf"
+        enscript -p - -2 -r  "${driver}Transcript" |  ps2pdf - "${driver}Output.pdf"
 
-        rm "${driver}TOBEDELETED"
-	rm "${driver}DELETEME"
+        rm "${driver}Transcript"
 
         pdf_files[counter_pdf]="${driver}Output.pdf"
         ((counter_pdf++))
