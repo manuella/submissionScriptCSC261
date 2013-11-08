@@ -78,7 +78,7 @@ do
         pdf_files[counter_pdf]="${driver}.pdf"
         ((counter_pdf++))
 
-        source_files[counter_source]="${driver}.scm"
+        source_files[counter_source]="$driver.scm"
         ((counter_source++)) 
 
 
@@ -126,23 +126,22 @@ do
         enscript -p - -Escheme -2 -r --color  $file_name  |  ps2pdf - "${file_name%.c}.pdf"
         #This should be able to handle make as well
         
-        pdf_files[counter_pdf]="${driver}.pdf"
+        pdf_files[counter_pdf]="${file_name%.c}.pdf"
         ((counter_pdf++))
         
-        source_files[counter_source]="${driver}.scm"
+        source_files[counter_source]=$file_name
         ((counter_source++))
         
         
         
         
-        #if a scheme file
+    #if a scheme file
     elif  [ "${file_name%.scm}" != "$file_name" ]; #Convert .scm file into .pdf and make sure it is not a driver
     then
 
         enscript -p - -Escheme -2 -r --color  ${file_name} | ps2pdf - ${file_name_loc%.scm}.pdf
-        #This line will cause non-termination
 
-        pdf_files[counter_pdf]="${file_name%.scm}.pdf"
+        pdf_files[counter_pdf]=${file_name%.scm}.pdf
         ((count_pdf++))
        
         source_files[counter_source]=${file_name}
