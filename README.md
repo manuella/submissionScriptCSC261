@@ -1,8 +1,12 @@
+
 submissionScriptCSC261
 ======================
 
 A script in developement for formatting purposes
 
+Disclaimer: This script has been tested, but only briefly. Please back up your 
+work in a different directory before using. In particular, see the last few lines
+of this readme.
 
 Usage This is specifically built for Grinnell CSC261 Artifical Intelligence.
 I am generally absent-minded, so I tried stream-lining the submission process.
@@ -25,4 +29,4 @@ This script has not been made to recognize files with different file extensions,
 v
 testfile.scm == testfile.c
 
-Avoid this
+Avoid this, it will DELETE YOUR FILES
