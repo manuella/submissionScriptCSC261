@@ -28,6 +28,7 @@ Advice from adam:
 
 Remove the file type for c before adding ".pdf"
 *TOBEDELETED are not deleted
+Replace TOBEDELETED with a pipe
 
 Make sure that the arrays containing the files are correct
 
