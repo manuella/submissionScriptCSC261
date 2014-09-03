@@ -24,6 +24,8 @@ $script source.scm driver.scm] source1.c driver1.c]  source2.scm
 
 NOTES
 
+Requires package a2ps.
+
 This script has not been made to recognize files with different file extensions, but the same name.
 |
 v
